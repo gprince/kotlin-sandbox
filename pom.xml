@@ -14,8 +14,8 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-        <kotlin.version>1.0.0-beta-2423</kotlin.version>
-        <spek.version>0.1.182</spek.version>
+        <kotlin.version>1.0.0-beta-3595</kotlin.version>
+        <juint.version>4.13-SNAPSHOT</juint.version>
     </properties>
 
     <repositories>
@@ -63,19 +63,16 @@
                 <artifactId>kotlin-stdlib</artifactId>
                 <version>${kotlin.version}</version>
             </dependency>
-
             <dependency>
-                <groupId>org.jetbrains.spek</groupId>
-                <artifactId>spek</artifactId>
-                <version>${spek.version}</version>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${juint.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
-
-
         <plugins>
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
