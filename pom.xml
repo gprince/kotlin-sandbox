@@ -15,7 +15,7 @@
     <properties>
         <jdk.version>1.8</jdk.version>
         <kotlin.version>1.0.0-beta-3595</kotlin.version>
-        <juint.version>4.13-SNAPSHOT</juint.version>
+        <juint.version>4.12</juint.version>
     </properties>
 
     <repositories>

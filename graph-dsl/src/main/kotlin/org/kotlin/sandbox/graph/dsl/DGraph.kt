@@ -1,29 +1,51 @@
 package org.kotlin.sandbox.graph.dsl
 
+import org.kotlin.sandbox.graph.dsl.DEdge.Companion.createEdge
+import org.kotlin.sandbox.graph.dsl.Vertex.Companion.createVertex
+
+/**
+ * # Empty String
+ */
 val String.Companion.EMPTY: String
     get() = ""
 
+/**
+ * # Vertex is the fundamental unit of which graphs are formed
+ * @constructor Private constructor to enforce the use of [createVertex] method
+ * @property name A name for the [Vertex]
+ * @property graph The [DGraph] that holds this [Vertex]
+ */
 class Vertex private constructor(val name: String, val graph: DGraph) {
 
-    val incomingEdges = hashMapOf<String, Edge>()
-    val outgoingEdges = hashMapOf<String, Edge>()
+    val incomingEdges = hashMapOf<String, DEdge>()
+    val outgoingEdges = hashMapOf<String, DEdge>()
 
-    internal companion object {
+    companion object {
 
+        /**
+         * # A NULL [Vertex] has empty [String] name and is associated to [DGraph.NULL]
+         */
         val NULL = Vertex(String.EMPTY, DGraph.NULL)
 
         /**
-         * @param name A name for the Vertex to build
-         * @param graph The graph that hold this Vertex
+         * # Factory that create a new [Vertex]
+         * @param name A name for the Vertex to create
+         * @param graph The graph that hold this [Vertex]
          */
-        fun vertex(name: String, graph: DGraph): Vertex {
+        fun createVertex(name: String, graph: DGraph): Vertex {
             return Vertex(name, graph)
         }
     }
 
 }
 
-class Edge private constructor(val name: String, val graph: DGraph) {
+/**
+ * # A edge connects two vertices named : source and target
+ * @constructor Private constructor to enforce the use of [createEdge] method
+ * @property name A name for the [DEdge]
+ * @property graph The [DGraph] that holds this [DEdge]
+ */
+class DEdge protected constructor(val name: String, val graph: DGraph) {
 
     private var _source: Vertex? = null
     val source: Vertex
@@ -34,24 +56,25 @@ class Edge private constructor(val name: String, val graph: DGraph) {
     val target: Vertex
         get() = this._target ?: Vertex.NULL
 
-    internal companion object {
+    companion object {
         /**
-         * @param name A name for the Edge to build
-         * @param graph The graph that hold this Edge
+         * # Factory that create a new [DEdge]
+         * @param name A name for the [DEdge] to create
+         * @param graph The graph that hold this [DEdge]
          */
-        fun edge(name: String, graph: DGraph): Edge {
-            return Edge(name, graph)
+        fun createEdge(name: String, graph: DGraph): DEdge {
+            return DEdge(name, graph)
         }
     }
 
 
-    infix fun from(source: Vertex): Edge {
+    infix fun from(source: Vertex): DEdge {
         this._source = source
         source.outgoingEdges.put(this.name, this)
         return this
     }
 
-    infix fun to(target: Vertex): Edge {
+    infix fun to(target: Vertex): DEdge {
         this._target = target
         target.incomingEdges.put(this.name, this)
         return this
@@ -60,16 +83,14 @@ class Edge private constructor(val name: String, val graph: DGraph) {
 
 
 /**
- * <h1>A Directed Graph is a triple consisting of a vertex set an edge set, and a
- * directed relation that associates with each edge two vertices (not necessarily
- * distinct) called source and target.</h1>
- * @constructor create a new empty [DGraph]
+ * # A Directed Graph is a triple consisting of a set of vertices connected by edges, where the edges have a direction associated with them.
+ * @constructor Create a new empty [DGraph]
  * @property name A name for the [DGraph]
  */
 class DGraph(val name: String) {
 
     val vertices = hashMapOf<String, Vertex>()
-    val edges = hashMapOf<String, Edge>()
+    val edges = hashMapOf<String, DEdge>()
 
     companion object {
 
@@ -79,7 +100,7 @@ class DGraph(val name: String) {
         val NULL = DGraph(String.EMPTY)
 
         /**
-         * <h1>Create a new [DGraph] with the given name and builder function.</h1>
+         * # Create a new [DGraph] with the given name and builder function.
          * @param name A name for the [DGraph] to build
          * @param build A builder extension function to initialize the new [DGraph], default {}
          */
@@ -91,48 +112,27 @@ class DGraph(val name: String) {
     }
 
     /**
-     * <h1>Build a new [Vertex] with the given name in this [DGraph].</h1>
+     * # Build a new [Vertex] with the given name in this [DGraph].
      * @param name A name for the [Vertex] to build
      * @param build A builder extension function to initialize the new [Vertex], default {}
      */
     fun vertex(name: String, build: Vertex.() -> Unit = {}): Vertex {
-        val vertex = Vertex.vertex(name, this)
+        val vertex = createVertex(name, this)
         vertex.build()
         vertices.put(name, vertex)
         return vertex
     }
 
     /**
-     * <h1>Build a new [Edge] with the given name in this [DGraph].</h1>
-     * @param name A name for the [Edge] to build
-     * @param build A builder extension function to initialize the new [Edge], default {}
+     * # Build a new [DEdge] with the given name in this [DGraph].
+     * @param name A name for the [DEdge] to build
+     * @param build A builder extension function to initialize the new [DEdge], default {}
      */
-    fun edge(name: String, build: Edge.() -> Unit = {}): Edge {
-        val edge = Edge.edge(name, this)
+    fun edge(name: String, build: DEdge.() -> Unit = {}): DEdge {
+        val edge = createEdge(name, this)
         edge.build()
         edges.put(name, edge)
         return edge
     }
-
-}
-
-fun main(args: Array<String>) {
-
-    val graphName = "test-graph"
-    val vertexName1 = "vertex_1"
-    val vertexName2 = "vertex_2"
-    val edgeName = "$vertexName1-To-$vertexName2"
-
-
-    val graph: DGraph = DGraph.graph(graphName) {
-        edge(edgeName) from vertex(vertexName1) to vertex(vertexName2)
-    }
-
-    kotlin.test.assertNotNull(graph)
-    kotlin.test.assertEquals(graphName, graph.name)
-    kotlin.test.assertEquals(2, graph.vertices.size)
-    kotlin.test.assertEquals(1, graph.edges.size)
-    kotlin.test.assertEquals(graph.vertices[vertexName1], graph.edges[edgeName]?.source)
-    kotlin.test.assertEquals(graph.vertices[vertexName2], graph.edges[edgeName]?.target)
 
 }
