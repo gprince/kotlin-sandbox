@@ -19,14 +19,16 @@
       </profile>
       <profile default="false" name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="graph-dsl" />
+        <module name="http-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="graph-dsl" target="1.5" />
+      <module name="http-server" target="1.5" />
       <module name="kotlin-sandbox" target="1.5" />
     </bytecodeTargetLevel>
   </component>

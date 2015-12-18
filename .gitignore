@@ -1,3 +1,4 @@
-/.idea/.stickyStorage
-/.idea/workspace.xml
+/graph-dsl/graph-dsl.iml
+/kotlin-sandbox.iml
+/.idea
 /graph-dsl/target

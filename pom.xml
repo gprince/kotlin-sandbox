@@ -6,6 +6,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>graph-dsl</module>
+        <module>http-server</module>
     </modules>
 
     <groupId>org.kotlin.sandbox</groupId>
