@@ -43,13 +43,15 @@ class SimpleService {
             response = HelloMessage::class)
     @ApiResponses(ApiResponse(code = 500, message = "Internal server error"))
     fun say(@PathParam("message") message: String?): Response =
-            metricRegistry.timer(name(SimpleService::class.java, "say-service")).
-                    time().
-                    using {
-                        Response.
-                                ok(HelloMessage("""Hello, you said "${message ?: "nothing!"}"""", now())).
-                                build()
-                    } ?: Response.serverError().build()
+            try {
+                metricRegistry.timer(name(SimpleService::class.java, "say-service")).time().using {
+                    Response.
+                            ok(HelloMessage("""Hello, you said "${message ?: "nothing!"}"""", now())).
+                            build()
+                }
+            } catch(e: Exception) {
+                Response.serverError().build()
+            }
 
 }
 
