@@ -2,3 +2,4 @@
 /kotlin-sandbox.iml
 /.idea
 /graph-dsl/target
+/http-server/target
