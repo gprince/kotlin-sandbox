@@ -2,6 +2,7 @@ package fr.gprince.kotlin.sandbox.http.server.service
 
 import com.codahale.metrics.MetricRegistry.name
 import fr.gprince.kotlin.sandbox.http.server.application.metricRegistry
+import fr.gprince.kotlin.sandbox.http.server.application.using
 import fr.gprince.kotlin.sandbox.http.server.domain.HelloMessage
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -16,13 +17,6 @@ import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
-
-public inline fun <T : Closeable, R> T.using(block: (T) -> R): R =
-        try {
-            block(this)
-        } finally {
-            this.close()
-        }
 
 /**
  * # Sample service

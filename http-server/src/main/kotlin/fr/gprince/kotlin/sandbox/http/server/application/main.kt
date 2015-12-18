@@ -5,6 +5,7 @@ import com.codahale.metrics.MetricRegistry
 import fr.gprince.kotlin.sandbox.http.server.jackson.config.JacksonConfig
 import fr.gprince.kotlin.sandbox.http.server.service.SimpleService
 import io.undertow.Undertow
+import java.io.Closeable
 
 public val metricRegistry = MetricRegistry()
 public val jmxReporter = JmxReporter.forRegistry(metricRegistry).build()
@@ -33,3 +34,9 @@ fun main(args: Array<String>) {
 }
 
 
+public inline fun <T : Closeable, R> T.using(block: (T) -> R): R =
+        try {
+            block(this)
+        } finally {
+            this.close()
+        }
