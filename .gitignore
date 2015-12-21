@@ -1,5 +1,10 @@
-/graph-dsl/graph-dsl.iml
-/kotlin-sandbox.iml
-/.idea
-/graph-dsl/target
-/http-server/target
+*.idea
+*.idea/**
+*.iml
+*.ipr
+target
+*.project
+*.classpath
+*.iws
+*.settings/**
+*.log
