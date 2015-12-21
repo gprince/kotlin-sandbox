@@ -8,7 +8,6 @@ import io.undertow.Undertow
 import java.io.Closeable
 
 public val metricRegistry = MetricRegistry()
-public val jmxReporter = JmxReporter.forRegistry(metricRegistry).build()
 
 fun main(args: Array<String>) {
 
@@ -30,7 +29,10 @@ fun main(args: Array<String>) {
                 setClassLoader(Thread.currentThread().contextClassLoader)
 
         deploy(deploymentInfo)
+
     }.start(Undertow.builder().addHttpListener(8080, "localhost"))
+
+    JmxReporter.forRegistry(metricRegistry).build().start()
 }
 
 
